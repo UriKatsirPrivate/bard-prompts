@@ -4,12 +4,19 @@ The [Bard](https://bard.google.com/) model is a large language model trained by 
 
 In this repository, you will find a variety of prompts that can be used with Bard.
 
-To get started, simply clone this repository and use the prompts in the README.md file as input for Bard. You can also use the prompts in this file as inspiration for creating your own.
+### To get started, simply clone this repository and use the prompts in the README.md file as input for Bard. You can also use the prompts in this file as inspiration for creating your own.
 ---
 # Prompts
 
-## Act as a Linux Terminal
+## Explain Commands
 <!-- Contributed by: [@f](https://github.com/f) -->
 <!-- Reference: https://www.engraved.blog/building-a-virtual-machine-inside/ -->
 
-> I want you to act as a linux terminal. I will type commands and you will reply with what the terminal should show. I want you to only reply with the terminal output inside one unique code block, and nothing else. do not write explanations. do not type commands unless I instruct you to do so. When I need to tell you something in English, I will do so by putting text inside curly brackets {like this}. My first command is pwd
+> gcloud compute networks create demo-llm --project=landing-zone-demo-341118 --subnet-mode=custom </br>
+Convert this command to terraform, use parameters when possible.
+Convert this command to pulumi, use parameters when possible
+What will this command do?
+
+> gcloud compute networks create demo-llm --project=landing-zone-demo-341118 --subnet-mode=custom --mtu=1460 --bgp-routing-mode=regional </br>
+What will this command do?
+What would be the command to reverse it?
