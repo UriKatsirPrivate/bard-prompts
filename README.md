@@ -133,3 +133,74 @@ resource "google_storage_bucket" "example" {
   storage_class = var.storage_class
 }
 ```
+## Switch Between IaC Providers
+### Pulumi to Terraform
+> convert the Pulumi below to terraform:
+``` python
+import * as pulumi from "@pulumi/pulumi";
+import * as gcp from "@pulumi/gcp";
+
+const config = new pulumi.Config();
+const project_id = config.require("project_id");
+const region = config.require("region");
+const zone = config.require("zone");
+const instance_name = config.require("instance_name");
+const machine_type = config.require("machine_type");
+const image = config.require("image");
+const network = config.require("network");
+const bucket_name = config.require("bucket_name");
+const bucket_location = config.require("bucket_location");
+
+const provider = new gcp.Provider("provider", {
+  project: project_id,
+  region: region,
+});
+
+const myInstance = new gcp.compute.Instance("my-instance", {
+  name: instance_name,
+  machineType: machine_type,
+  zone: zone,
+
+  bootDisk: {
+    initializeParams: {
+      image: image,
+    },
+  },
+
+  networkInterfaces: [{
+    network: network,
+    accessConfigs: [{}],
+  }],
+}, {
+  provider: provider,
+});
+```
+###  Terraform to Pulumi
+>convert the terraform below to pulumi
+```json
+provider "google" {
+  project = var.project_id
+  region  = var.region
+}
+
+resource "google_compute_instance" "my-instance" {
+  name         = var.instance_name
+  machine_type = var.machine_type
+  zone         = var.zone
+
+  boot_disk {
+    initialize_params {
+      image = var.image
+    }
+  }
+
+  network_interface {
+    network = var.network
+    access_config {
+    }
+  }
+}
+```
+###  Terraform to gCloud
+> Write a .tf file to create a gce instance. Use demo values as needed. </br>
+Replace the .tf with gCloud commands
