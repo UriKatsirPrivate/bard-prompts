@@ -491,3 +491,15 @@ Parameterize the .tf file as much as possible
 >All of the above using Pulumi in python
 
 ## Cloud Run Service
+### Version 1
+>Write a simple python code that can be used an an entry point for Cloud Run Service. </br>
+The code should use Flask and listen to all traffic on port 8080</br>
+Write the DockerFile for this service</br>
+write the requirements.txt for this service</br>
+Write the gCloud commands to deploy to GCP
+
+### Version 2
+>List all required files for a Cloud Run service written in Python</br>
+Create a sample for each file</br>
+Create the gCloud commands to deploy to GCP</br>
+
