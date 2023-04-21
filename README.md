@@ -503,3 +503,13 @@ Write the gCloud commands to deploy to GCP
 Create a sample for each file</br>
 Create the gCloud commands to deploy to GCP</br>
 
+### Deploy Using Terraform/Pulumi
+>Create a Terraform/Pulumi script to deploy a Python-based Cloud Run service on Google Cloud Platform within the "demo-project" project. The script should also include the necessary steps to build and upload a Docker container for the Cloud Run service. The container should include Flask, as well as any other dependencies required by the application.
+The Cloud Run service should be accessible over port 8080. The Terraform script will create a new Google Cloud Storage bucket to store the container image.
+The Docker container for your Cloud Run service will be named "demo-container". Please provide the contents of the requirements.txt file so that we can include it in the Docker container.
+
+>Same in Pulumi
+
+## RESTful API
+>Create all required files for a RESTful API using Python and deploy it on Google Cloud Run
+
