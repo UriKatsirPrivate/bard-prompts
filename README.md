@@ -247,3 +247,239 @@ else:
     except ClientError as e:
         print(e)
 ```
+### AWS CDK to Terraform
+>Convert the CDK python code below to terraform:
+```python
+import os.path
+
+from aws_cdk.aws_s3_assets import Asset
+
+from aws_cdk import (
+    aws_ec2 as ec2,
+    aws_iam as iam,
+    App, Stack
+)
+
+from constructs import Construct
+
+dirname = os.path.dirname(__file__)
+
+
+class EC2InstanceStack(Stack):
+
+    def __init__(self, scope: Construct, id: str, **kwargs) -> None:
+        super().__init__(scope, id, **kwargs)
+
+        # VPC
+        vpc = ec2.Vpc(self, "VPC",
+            nat_gateways=0,
+            subnet_configuration=[ec2.SubnetConfiguration(name="public",subnet_type=ec2.SubnetType.PUBLIC)]
+            )
+
+        # AMI
+        amzn_linux = ec2.MachineImage.latest_amazon_linux(
+            generation=ec2.AmazonLinuxGeneration.AMAZON_LINUX_2,
+            edition=ec2.AmazonLinuxEdition.STANDARD,
+            virtualization=ec2.AmazonLinuxVirt.HVM,
+            storage=ec2.AmazonLinuxStorage.GENERAL_PURPOSE
+            )
+
+        # Instance Role and SSM Managed Policy
+        role = iam.Role(self, "InstanceSSM", assumed_by=iam.ServicePrincipal("ec2.amazonaws.com"))
+
+        role.add_managed_policy(iam.ManagedPolicy.from_aws_managed_policy_name("AmazonSSMManagedInstanceCore"))
+
+        # Instance
+        instance = ec2.Instance(self, "Instance",
+            instance_type=ec2.InstanceType("t3.nano"),
+            machine_image=amzn_linux,
+            vpc = vpc,
+            role = role
+            )
+
+        # Script in S3 as Asset
+        asset = Asset(self, "Asset", path=os.path.join(dirname, "configure.sh"))
+        local_path = instance.user_data.add_s3_download_command(
+            bucket=asset.bucket,
+            bucket_key=asset.s3_object_key
+        )
+
+        # Userdata executes script from S3
+        instance.user_data.add_execute_file_command(
+            file_path=local_path
+            )
+        asset.grant_read(instance.role)
+
+app = App()
+EC2InstanceStack(app, "ec2-instance")
+
+app.synth()
+```
+### CloudFormation to Terraform
+>translate the cloudformation template below to terraform:
+```json
+{
+  "AWSTemplateFormatVersion" : "2010-09-09",
+  "Description" : "AWS CloudFormation Sample Template EC2Instance.",
+  "Parameters" : {
+    "KeyName": {
+      "Description" : "Name of an existing EC2 KeyPair to enable SSH access to the instance",
+      "Type": "AWS::EC2::KeyPair::KeyName",
+      "ConstraintDescription" : "must be the name of an existing EC2 KeyPair."
+    },
+    "InstanceType" : {
+      "Description" : "WebServer EC2 instance type",
+      "Type" : "String",
+      "Default" : "t2.small",
+      "AllowedValues" : [ "t1.micro", "t2.nano", "t2.micro", "t2.small"]
+,
+      "ConstraintDescription" : "must be a valid EC2 instance type."
+    },
+    "SSHLocation" : {
+      "Description" : "The IP address range that can be used to SSH to the EC2 instances",
+      "Type": "String",
+      "MinLength": "9",
+      "MaxLength": "18",
+      "Default": "0.0.0.0/0",
+      "AllowedPattern": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})",
+      "ConstraintDescription": "must be a valid IP CIDR range of the form x.x.x.x/x."
+   }
+  },
+  "Resources" : {
+    "EC2Instance" : {
+      "Type" : "AWS::EC2::Instance",
+      "Properties" : {
+        "InstanceType" : { "Ref" : "InstanceType" },
+        "SecurityGroups" : [ { "Ref" : "InstanceSecurityGroup" } ],
+        "KeyName" : { "Ref" : "KeyName" },
+        "ImageId" : { "Fn::FindInMap" : [ "AWSRegionArch2AMI", { "Ref" : "AWS::Region" },
+                          { "Fn::FindInMap" : [ "AWSInstanceType2Arch", { "Ref" : "InstanceType" }, "Arch" ] } ] }
+      }
+    },
+    "InstanceSecurityGroup" : {
+      "Type" : "AWS::EC2::SecurityGroup",
+      "Properties" : {
+        "GroupDescription" : "Enable SSH access via port 22",
+        "SecurityGroupIngress" : [ {
+          "IpProtocol" : "tcp",
+          "FromPort" : "22",
+          "ToPort" : "22",
+          "CidrIp" : { "Ref" : "SSHLocation"}
+        } ]
+      }
+    }
+  },
+  "Outputs" : {
+    "InstanceId" : {
+      "Description" : "InstanceId of the newly created EC2 instance",
+      "Value" : { "Ref" : "EC2Instance" }
+    }}}
+```
+>create a gcp equivalent from the terraform
+
+### AWS Terraform to GCP Terraform
+>Given the aws terraform below, create the gcp equivalent:
+```json
+# Importing required AWS provider
+provider "aws" {
+  region = "us-east-1"
+}
+
+# Creating a VPC
+resource "aws_vpc" "my_vpc" {
+  cidr_block = "10.0.0.0/16"
+
+  tags = {
+    Name = "my_vpc"
+  }
+}
+
+# Creating a public subnet
+resource "aws_subnet" "public" {
+  vpc_id = aws_vpc.my_vpc.id
+  cidr_block = "10.0.1.0/24"
+  availability_zone = "us-east-1a"
+}
+
+# Creating an IAM role for EC2 instance
+resource "aws_iam_role" "instance_role" {
+  name = "InstanceSSM"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = "sts:AssumeRole"
+        Effect = "Allow"
+        Principal = {
+          Service = "ec2.amazonaws.com"
+        }
+      }
+    ]
+  })
+}
+
+# Adding the AmazonSSMManagedInstanceCore managed policy to the IAM role
+resource "aws_iam_role_policy_attachment" "instance_role_policy" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+  role = aws_iam_role.instance_role.name
+}
+
+# Creating a security group for the EC2 instance
+resource "aws_security_group" "instance_sg" {
+  name_prefix = "instance_sg_"
+  vpc_id = aws_vpc.my_vpc.id
+
+  ingress {
+    from_port = 0
+    to_port = 65535
+    protocol = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port = 0
+    to_port = 65535
+    protocol = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
+# Creating an EC2 instance
+resource "aws_instance" "my_instance" {
+  ami = "ami-0c55b159cbfafe1f0"
+  instance_type = "t3.nano"
+  key_name = "my_key_pair"
+  subnet_id = aws_subnet.public.id
+  vpc_security_group_ids = [aws_security_group.instance_sg.id]
+
+  user_data = <<-EOF
+              #!/bin/bash
+              sudo yum update -y
+              sudo yum install -y httpd
+              sudo service httpd start
+              sudo chkconfig httpd on
+              EOF
+
+  iam_instance_profile = aws_iam_instance_profile.instance_profile.name
+}
+
+# Creating an instance profile for the EC2 instance
+resource "aws_iam_instance_profile" "instance_profile" {
+  name = "my_instance_profile"
+  role = aws_iam_role.instance_role.name
+}
+
+# Creating an S3 bucket to store the script
+resource "aws_s3_bucket" "script_bucket" {
+  bucket = "my-bucket"
+  acl = "private"
+}
+
+# Adding the script as an object to the S3 bucket
+resource "aws_s3_bucket_object" "script_object" {
+  key = "configure.sh"
+  source = "/path/to/configure.sh"
+  bucket = aws_s3_bucket.script_bucket.id
+}
+```
