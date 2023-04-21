@@ -483,3 +483,11 @@ resource "aws_s3_bucket_object" "script_object" {
   bucket = aws_s3_bucket.script_bucket.id
 }
 ```
+## Landing Zone
+>Create a terraform .tf file for GCP landing zone </br>
+Add Folders, Organization Policies and projects </br>
+Parameterize the .tf file as much as possible
+
+>All of the above using Pulumi in python
+
+## Cloud Run Service
