@@ -122,7 +122,7 @@ resource "google_compute_firewall" "example" {
 ```
 
 The .tf file:
-```json
+```yaml
 provider "google" {
   project = var.project_id
   region = var.region
