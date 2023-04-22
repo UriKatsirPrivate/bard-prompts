@@ -1,10 +1,11 @@
-Welcome to the "Bard Prompts" repository! This is a collection of prompt examples to be used with the Bard model.
+Welcome to the "Bard Prompts" repository. This is a collection of prompt examples to be used with the Bard model.
 
-The [Bard](https://bard.google.com/) model is a large language model trained by Google that is capable of generating human-like text. By providing it with a prompt, it can generate responses that continue the conversation or expand on the given prompt.
+[Bard](https://bard.google.com/) is a large language model from Google AI that can generate text, translate languages, write different kinds of creative content, and answer your questions in an informative way.
 
 In this repository, you will find a variety of prompts that can be used with Bard.
 
-### To get started, simply clone this repository and use the prompts in the README.md file as input for Bard. You can also use the prompts in this file as inspiration for creating your own.
+To get started, simply clone this repository and use the prompts in the README.md file as input for Bard. You can also use the prompts in this file as inspiration for creating your own.
+
 ---
 # Prompts
 
