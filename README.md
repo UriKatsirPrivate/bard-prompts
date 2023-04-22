@@ -13,12 +13,12 @@ In this repository, you will find a variety of prompts that can be used with Bar
 <!-- Reference: https://www.engraved.blog/building-a-virtual-machine-inside/ -->
 
 > gcloud compute networks create demo-llm --project=landing-zone-demo-341118 --subnet-mode=custom </br>
-Convert this command to terraform, use parameters when possible.
-Convert this command to pulumi, use parameters when possible
+Convert this command to terraform, use parameters when possible.</br>
+Convert this command to pulumi, use parameters when possible</br>
 What will this command do?
 
 > gcloud compute networks create demo-llm --project=landing-zone-demo-341118 --subnet-mode=custom --mtu=1460 --bgp-routing-mode=regional </br>
-What will this command do?
+What will this command do?</br>
 What would be the command to reverse it?
 
 ## Create/Modify IaC Modules
@@ -73,7 +73,7 @@ resource "google_compute_instance" "my-instance" {
 ### TF Module → TF State
 >given the .tf file below, create the state file that will be created.
 ###
-```json 
+```yaml 
   provider "google" {
   project = demo-project
   region = us-east1
@@ -84,12 +84,13 @@ resource "google_storage_bucket" "example" {
   location = us-east1
   storage_class = STANDARD
 }
-###
 ```
+###
+
 ### TF State + TF Module → Plan
 > I am going to provide two files. a terraform state file and a .tf file. Tell me what would be the result of applying the .tf file.
 The state file:
-```json
+```yaml
 terraform {
   backend "gcs" {
     bucket = "my-bucket"
@@ -177,7 +178,7 @@ const myInstance = new gcp.compute.Instance("my-instance", {
 ```
 ###  Terraform to Pulumi
 >convert the terraform below to pulumi
-```json
+```yaml
 provider "google" {
   project = var.project_id
   region  = var.region
@@ -379,7 +380,7 @@ app.synth()
 
 ### AWS Terraform to GCP Terraform
 >Given the aws terraform below, create the gcp equivalent:
-```json
+```yaml
 # Importing required AWS provider
 provider "aws" {
   region = "us-east-1"
