@@ -9,18 +9,36 @@ To get started, simply clone this repository and use the prompts in the README.m
 ---
 # Prompts
 
-## Explain Commands
+## CLI Commands
 <!-- Contributed by: [@f](https://github.com/f) -->
 <!-- Reference: https://www.engraved.blog/building-a-virtual-machine-inside/ -->
+### Explain & Convert Commands
+> Given the command below, answer the following questions: </br>
+  1)What will this command do?</br>
+  2)What would be the command to reverse it? </br>
+  command: </br>
+    ###</br>
+    gcloud compute networks create demo-llm --project=landing-zone-demo-341118 --subnet-mode=custom --mtu=1460 --bgp-routing-mode=regional </br>
+    ###
 
-> gcloud compute networks create demo-llm --project=landing-zone-demo-341118 --subnet-mode=custom </br>
-Convert this command to terraform, use parameters when possible.</br>
-Convert this command to pulumi, use parameters when possible</br>
-What will this command do?
+> Convert this command to terraform, use parameters when possible.
 
-> gcloud compute networks create demo-llm --project=landing-zone-demo-341118 --subnet-mode=custom --mtu=1460 --bgp-routing-mode=regional </br>
-What will this command do?</br>
-What would be the command to reverse it?
+> Convert this command to Pulumi, use variables when possible.
+
+### AWS CLI → gCloud
+
+> Convert the AWS CLI command below to GCP equivalent. </br>
+Command: </br>
+    ###</br>
+    aws ec2 run-instances \
+    --image-id ami-0123456789abcdef0 \
+    --instance-type t2.micro \
+    --key-name my-key-pair \
+    --subnet-id subnet-123456789abcdef0 \
+    --security-group-ids sg-123456789abcdef0</br>
+    ###
+
+> Explain the command
 
 ## Create/Modify IaC Modules
 ### Create Services with Terraform
