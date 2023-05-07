@@ -7,7 +7,7 @@ In this repository, you will find a variety of prompts that can be used with Bar
 To get started, simply clone this repository and use the prompts in the README.md file as input for Bard. You can also use the prompts in this file as inspiration for creating your own.
 
 # Table
-1. [CLI Commands](#RESTful)
+1. [CLI Commands](#RESTful-API)
 
 
 ---
