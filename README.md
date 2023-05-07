@@ -531,5 +531,7 @@ The Docker container for your Cloud Run service will be named "demo-container". 
 >Same in Pulumi
 
 ## RESTful API
->Create all required files for a RESTful API using Python and deploy it on Google Cloud Run
+>Create all required files for a RESTful API using Python and deploy it on Google Cloud Run</br>
+Add a python sample for each RESTful verb </br>
+Show the full main.py file
 
