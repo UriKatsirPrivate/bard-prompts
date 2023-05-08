@@ -84,10 +84,47 @@ resource "google_compute_instance" "my-instance" {
 
 ## Reverse Engineering
 ### TF State → TF Module
-1. Write a simple terraform state file
-2. Create a .tf file based on the state file
-3. Split the .tf file into a more flexible structure. For example, move the variables into a separate file.
-4. Rewrite the .tf files to use GCP equivalent
+>given the terraform state file below, create the .tf file.
+###
+```json
+{
+  "version": 4,
+  "terraform_version": "1.0.0",
+  "serial": 1,
+  "lineage": "c4c0d3a5-2e12-4e6a-b9e2-49c32e77a54d",
+  "outputs": {},
+  "resources": [
+    {
+      "mode": "managed",
+      "type": "google_compute_instance",
+      "name": "example_instance",
+      "provider": "provider.google",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "boot_disk.#": "1",
+            "boot_disk.0.initialize_params.#": "1",
+            "boot_disk.0.initialize_params.0.image": "ubuntu-os-cloud/ubuntu-2004-lts",
+            "id": "projects/your-project-id/zones/us-central1-a/instances/example-instance",
+            "machine_type": "n1-standard-1",
+            "name": "example-instance",
+            "network_interface.#": "1",
+            "network_interface.0.access_config.#": "1",
+            "network_interface.0.network": "default",
+            "self_link": "https://www.googleapis.com/compute/v1/projects/your-project-id/zones/us-central1-a/instances/example-instance",
+            "zone": "us-central1-a"
+          },
+          "private": "************************************************************"
+        }
+      ]
+    }
+  ]
+}
+```
+###
+>Split the .tf file into a more flexible structure. For example, move the variables into a separate file.
+
 
 ### TF Module → TF State
 >given the .tf file below, create the state file that will be created.
