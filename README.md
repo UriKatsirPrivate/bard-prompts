@@ -540,6 +540,24 @@ resource "aws_s3_bucket_object" "script_object" {
   bucket = aws_s3_bucket.script_bucket.id
 }
 ```
+### AWS Ansible to GCP Ansible
+>Given the aws Ansible below, create the gcp equivalent:
+```yaml
+- name: start specific number of multiple instances
+  amazon.aws.ec2_instance:
+    instance_type: t3.small
+    image_id: ami-123456
+    count: 3
+    region: us-east-2
+    network:
+      assign_public_ip: true
+      security_group: default
+      vpc_subnet_id: subnet-0123456
+    state: present
+    tags:
+      foo: bar
+```
+
 ## Landing Zone
 >Create a terraform .tf file for GCP landing zone </br>
 Add Folders, Organization Policies and projects </br>
